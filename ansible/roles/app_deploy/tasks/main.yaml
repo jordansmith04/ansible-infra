@@ -1,0 +1,46 @@
+---
+- name: Set remote application directory path
+  ansible.builtin.set_fact:
+    remote_app_dir: "/home/{{ ansible_user }}/{{ app_name }}"
+
+- name: Create remote directory for the application
+  ansible.builtin.file:
+    path: "{{ remote_app_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Copy Dockerfile and index.html 
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ remote_app_dir }}/"
+    owner: "{{ ansible_user }}"
+    mode: '0644'
+  loop:
+    - Dockerfile
+    - index.html
+
+- name: Build the Docker image
+  community.docker.docker_image:
+    build:
+      path: "{{ remote_app_dir }}"
+    name: "{{ app_name }}"
+    tag: latest
+    source: build
+    state: present
+
+- name: Stop and remove any existing container running this app
+  community.docker.docker_container:
+    name: "{{ app_name }}"
+    state: absent
+  ignore_errors: yes
+
+- name: Run the new container, mapping host port {{ host_port }} to container port {{ container_port }}
+  community.docker.docker_container:
+    name: "{{ app_name }}"
+    image: "{{ app_name }}:latest"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ host_port }}:{{ container_port }}"

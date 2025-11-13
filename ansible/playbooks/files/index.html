@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Containerized Static Site</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 md:p-12 rounded-xl shadow-2xl max-w-lg w-full text-center border-t-4 border-indigo-500">
+        <svg class="mx-auto h-12 w-12 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4l8 4"/>
+        </svg>
+        <h1 class="text-3xl font-extrabold text-gray-900 mt-4">Deployment Successful!</h1>
+        <p class="mt-4 text-gray-600 leading-relaxed">
+            This static website is now running inside a **Docker container** on your EC2 instance, served by Nginx. This setup ensures consistency, portability, and easier lifecycle management.
+        </p>
+    </div>
+</body>
+</html>

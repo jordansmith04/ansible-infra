@@ -1,0 +1,15 @@
+---
+- name: Deploy containerized website on Ubuntu EC2
+  hosts: aws_ec2
+  gather_facts: yes
+  become: yes
+
+  vars:
+    app_name: static_web_app
+    container_port: 80
+    host_port: 80
+
+  roles:
+    - role: docker_setup
+    - role: cloudwatch_monitor
+    - role: app_deploy

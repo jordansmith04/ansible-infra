@@ -1,0 +1,12 @@
+---
+# General System Variables
+system_pkg_state: present
+system_update_cache: true
+
+# Nginx Variables
+nginx_port: 80
+nginx_welcome_message: "Welcome to the Ansible-Managed EC2 Instance!"
+
+# User Provisioning Variables
+admin_username: ops_admin
+ssh_key_type: rsa

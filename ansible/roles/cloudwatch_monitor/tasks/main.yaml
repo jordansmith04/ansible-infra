@@ -1,0 +1,46 @@
+---
+- name: Install utilities
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - wget
+    - unzip
+
+- name: Download the Amazon CloudWatch Agent package
+  ansible.builtin.get_url:
+    url: https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+    dest: /tmp/amazon-cloudwatch-agent.deb
+    mode: '0644'
+
+- name: Install the CloudWatch Agent
+  ansible.builtin.apt:
+    deb: /tmp/amazon-cloudwatch-agent.deb
+    state: present
+  register: cloudwatch_install_result
+  failed_when: cloudwatch_install_result.rc != 0 and 'already installed' not in cloudwatch_install_result.stdout
+
+- name: Create the CloudWatch Agent configuration directory
+  ansible.builtin.file:
+    path: /opt/aws/amazon-cloudwatch-agent/etc/
+    state: directory
+    mode: '0755'
+
+- name: Copy the CloudWatch Agent configuration file
+  ansible.builtin.copy:
+    src: files/cloudwatch_agent_config.json
+    dest: /opt/aws/amazon-cloudwatch-agent/etc/config.json
+    mode: '0644'
+  notify: Restart CloudWatch Agent
+
+- name: Configure the agent using the JSON file
+  ansible.builtin.command: >
+    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl
+    -a fetch-config -m ec2 -s
+    -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json
+
+- name: Ensure the CloudWatch Agent service is running and enabled
+  ansible.builtin.service:
+    name: amazon-cloudwatch-agent
+    state: started
+    enabled: yes
