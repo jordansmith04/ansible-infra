@@ -1,0 +1,22 @@
+---
+# nsure the necessary users and groups exist on the system
+- name: Create or ensure user accounts exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: present
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    groups: "{{ additional_groups | join(',') }}"
+    append: yes
+  loop: "{{ system_users }}"
+  loop_control:
+    label: "user {{ item.name }}"
+
+# Authorize the user's public SSH key for passwordless login
+- name: Set up SSH authorized keys for defined users
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ item.ssh_key }}"
+  loop: "{{ system_users }}"
+  loop_control:
+    label: "key for {{ item.name }}"

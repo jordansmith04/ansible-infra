@@ -8,7 +8,17 @@
     app_name: static_web_app
     container_port: 80
     host_port: 80
+  vars_files:
+    - vars/main.yml
+    - vars/user_secrets.yml
+  
+  pre_tasks:
+    - name: Ensure Python is installed (required by most Ansible modules)
+      raw: sudo apt-get update && sudo apt-get install -y python3
 
+  roles:
+    # 1. USERS: Configure SSH access and create non-root users first
+    - role: users
   roles:
     - role: docker_setup
     - role: cloudwatch_monitor

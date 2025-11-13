@@ -1,6 +1,0 @@
----
-# ansible-vault create_hash to generate a secure hash
-admin_password_hash: "$6$rounds=656000$h6w4K9kR6.tW0Z5p$fXbQ4iJz0X9y3Vq5L6mO7n8p2R1s0T0u5V9w8x3E4C1D2A3B4F5G6H7I8J9K0L1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5"
-
-# SSH public key for the AWS admin user
-ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCq... <public key content here>"
