@@ -1,0 +1,13 @@
+# Find EC2 instances with be_ tags in development environment
+plugin: aws_ec2
+regions:
+  - us-east-1
+filters:
+  instance-state-name: running
+  tag:Name:
+    - backend*
+  tag:Environment:
+    - development
+keyed_groups:
+  - key: tags.Component
+    prefix: be_
