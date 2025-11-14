@@ -10,7 +10,7 @@
     host_port: 80
   vars_files:
     - vars/main.yml
-    - vars/user_secrets.yml
+    - vars/user_secrets-unencrypted.yml
   
   pre_tasks:
     - name: Ensure Python is installed (required by most Ansible modules)
